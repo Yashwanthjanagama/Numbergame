@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Guessing Game</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Number Guessing Game</h1>
+    <p id="game-status"></p>
+    <input type="number" id="guess-input" placeholder="Enter your guess">
+    <button id="guess-button">Guess</button>
+
+    <script>
+        var attempts = 0;
+        var maxAttempts = 5;
+        var score = 0;
+
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 100) + 1;
+        }
+
+        function displayMessage(message) {
+            $('#game-status').text(message);
+        }
+
+        function compareGuess(randomNumber, guess) {
+            attempts++;
+
+            if (guess === randomNumber) {
+                displayMessage("Congratulations! You guessed the correct number in " + attempts + " attempts.");
+                score++;
+                $('#guess-button').attr('disabled', true);
+            } else if (guess < randomNumber) {
+                displayMessage("Too low! Try again.");
+            } else {
+                displayMessage("Too high! Try again.");
+            }
+
+            if (attempts === maxAttempts) {
+                displayMessage("You ran out of attempts. The correct number was " + randomNumber + ".");
+                $('#guess-button').attr('disabled', true);
+            }
+        }
+
+        $(document).ready(function() {
+            var randomNumber = generateRandomNumber();
+
+            $('#guess-button').click(function() {
+                var guess = parseInt($('#guess-input').val());
+
+                if (isNaN(guess) || guess < 1 || guess > 100) {
+                    displayMessage("Please enter a valid guess between 1 and 100.");
+                    return;
+                }
+
+                compareGuess(randomNumber, guess);
+            });
+        });
+    </script>
+</body>
+</html>
